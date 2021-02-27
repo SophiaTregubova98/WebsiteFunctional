@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class='row'>
+  <div class='col-1'></div>
+  <div class='col-4'>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      <div class='alert alert-warning'>
+        {% for message in messages %}
+          {{ message }}<br>
+        {% endfor %}
+      </div>
+      {% endif %}
+    {% endwith %}
+  </div>
+</div>
+<div class='row'>
+  <div class='col-1'></div>
+  <div class='col-7'>
+    <h2>
+    {% for new in news %}
+      <a href="{{ url_for('news.single_news', news_id=new.id) }}">{{ new.title }}</a>
+      <p><small>{{ new.date.strftime('%d %B %Y') }} | Комментарии: {{ new.comments_count() }}</small></p>
+    <hr>
+    {% endfor %}
+    </h2>
+  </div>
+  <div class='col-4'>
+    <h3>            
+      {% if weather %}
+        Сейчас {{ weather.temp_C }}, ощущается как {{ weather.FeelsLikeC }}
+      {% else %}
+        Сервис погоды временно недоступен
+      {% endif %}
+    </h3>
+  </div>
+</div>
+{% endblock %}

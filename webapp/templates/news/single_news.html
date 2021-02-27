@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class='row'>
+    <div class='col-2'></div>
+    {% include 'messages.html' %}
+</div>
+<div class='row'>
+    <div class='col-2'></div>
+    <div class='col-8 news-content'>
+        {{ news.text|safe }}
+    </div>
+</div>
+<div class='row'>
+    <div class='col-2'></div>
+    {% if current_user.is_authenticated %}
+        <form action="{{ url_for('news.add_comment') }}" method='post'>
+            {{ form.hidden_tag() }}
+        <div class='form-group'>
+            {{ form.text.label() }}
+            {{ form.text() }}
+        </div>
+        {{ form.submit }}
+        </form>
+    {% else %}
+    <p><a href='{{ url_for("user.login", next=request.full_path) }}'>Авторизуйтесь</a>, чтобы прокомментировать</p>
+    {% endif %}
+</div>
+<div class='row'>
+    <div class='col-2'></div>
+    {% if news.comments %}
+        <h3>Комментарии:</h3>
+</div>
+{% for comment in news.comments %}
+<div class='row'>
+    <div class='col-2'></div>
+            <div class="card">
+                <div class="card-body">
+                    <p class='card-text'>{{ comment.text }}</p>
+                    <p class='card-text'><small>{{ comment.user.username }} | {{ comment.date }}</small></p>
+                </div>
+            </div>
+</div>
+{% endfor %}
+{% endif %}
+
+{% endblock %}
